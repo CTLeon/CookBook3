@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,8 +42,10 @@ class Dish : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dish, container, false)
+        val view = inflater.inflate(R.layout.fragment_dish, null, false)
+        val text :TextView= view.findViewById(R.id.text)
+        text.text=param1
+        return view
     }
 
     // TODO: Rename method, update argument and hook method into UI event

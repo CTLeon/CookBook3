@@ -1,14 +1,15 @@
 package com.example.cookbook
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.widget.ListView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_dish_list.*
 
-class MainActivity : AppCompatActivity(), DishList.OnFragmentInteractionListener {
+
+class MainActivity : AppCompatActivity(), DishList.OnFragmentInteractionListener, Dish.OnFragmentInteractionListener {
     internal lateinit var db :DBHelper
     internal var firstDish:List<DishModel> = ArrayList<DishModel>()
     override fun onFragmentInteraction(uri: Uri) {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), DishList.OnFragmentInteractionListener
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.container,Dish())
                     .commit()
+
                 return@OnNavigationItemSelectedListener true
             }
 
@@ -34,17 +36,26 @@ class MainActivity : AppCompatActivity(), DishList.OnFragmentInteractionListener
         false
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        /**     db = DBHelper(this)
-        firstDish = db.allDish
-  db.addDish(DishModel(1,"asdasdas","sadasd"))
-        val adapter = ListDishAdapter(this@MainActivity,firstDish)
-        list1.adapter= adapter*/
+
+
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container,DishList())
+                .commit()
+
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
+    fun transferDish (dish: DishModel){
+        val dishName : String = dish.dishname.toString()
+        val dishDescription : String = dish.dishdescription.toString()
+        supportFragmentManager.beginTransaction()
+        .replace(R.id.container,Dish.newInstance(dishName,dishDescription))
+        .commit()
+}
 
 
 }

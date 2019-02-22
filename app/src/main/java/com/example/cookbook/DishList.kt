@@ -1,21 +1,29 @@
 package com.example.cookbook
 
+
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
+import android.widget.LinearLayout
+import android.widget.Toast
+
+
+
+
 
 
 class DishList : Fragment() {
     // TODO: Rename and change types of parameters
     internal lateinit var db :DBHelper
     internal var firstDish:List<DishModel> = ArrayList<DishModel>()
-
-    private lateinit var list: ListView
     private var param1: String? = null
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
@@ -29,22 +37,36 @@ class DishList : Fragment() {
 
     }
 
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_dish_list, null, false)
+        val view = inflater.inflate(R.layout.recyclerlist, null, false)
+
+        val MainActivity = MainActivity()
+
+
         db = DBHelper(this.context!!)
         firstDish = db.allDish
-        val adapter = ListDishAdapter(this@DishList.context,firstDish)
-        db.addDish(DishModel(1,"asdasdas","sadasd"))
-        list = ListView(this.context)
-        list.adapter= adapter
+        val reclist : RecyclerView = view!!.findViewById<RecyclerView>(R.id.reclist)
+        reclist.layoutManager = LinearLayoutManager(this.context,LinearLayout.VERTICAL,false)
+        val adapter = DishAdapterRecycler(firstDish,{dish : DishModel -> DishItemClicked(dish)})
+        reclist.adapter= adapter
+
 
         return view
     }
 
-    private fun refreshData() {
+    private fun DishItemClicked(dish : DishModel) {
+        val dishName:String = dish.dishname.toString()
+        val dishDescription:String = dish.dishdescription.toString()
+        val intent = Intent(activity, Main2Activity::class.java)
+        intent.putExtra("dish_name", dishName)
+        intent.putExtra("dish_description", dishDescription)
+        activity!!.startActivity(intent)
 
     }
 
