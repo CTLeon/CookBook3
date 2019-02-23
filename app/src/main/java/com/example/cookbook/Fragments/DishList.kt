@@ -1,10 +1,8 @@
-package com.example.cookbook
+package com.example.cookbook.Fragments
 
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -13,16 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
-
-
-
-
+import com.example.cookbook.Activitys.DishActivity
+import com.example.cookbook.DBHelper
+import com.example.cookbook.DishAdapterRecycler
+import com.example.cookbook.DishModel
+import com.example.cookbook.R
 
 
 class DishList : Fragment() {
     // TODO: Rename and change types of parameters
-    internal lateinit var db :DBHelper
+    internal lateinit var db : DBHelper
     internal var firstDish:List<DishModel> = ArrayList<DishModel>()
     private var param1: String? = null
     private var param2: String? = null
@@ -45,33 +43,26 @@ class DishList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.recyclerlist, null, false)
-
-        val MainActivity = MainActivity()
-
-
         db = DBHelper(this.context!!)
         firstDish = db.allDish
         val reclist : RecyclerView = view!!.findViewById<RecyclerView>(R.id.reclist)
-        reclist.layoutManager = LinearLayoutManager(this.context,LinearLayout.VERTICAL,false)
-        val adapter = DishAdapterRecycler(firstDish,{dish : DishModel -> DishItemClicked(dish)})
+        reclist.layoutManager = LinearLayoutManager(this.context,LinearLayout.VERTICAL,false) as RecyclerView.LayoutManager?
+        val adapter = DishAdapterRecycler(firstDish,{ dish: DishModel -> openDish(dish) })
         reclist.adapter= adapter
-
 
         return view
     }
 
-    private fun DishItemClicked(dish : DishModel) {
-        val dishName:String = dish.dishname.toString()
-        val dishDescription:String = dish.dishdescription.toString()
-        val intent = Intent(activity, Main2Activity::class.java)
-        intent.putExtra("dish_name", dishName)
-        intent.putExtra("dish_description", dishDescription)
+    fun openDish (dish : DishModel){
+        val intent = Intent (activity, DishActivity::class.java)
+        intent.putExtra("dishID",dish.id)
+        intent.putExtra("dishName",dish.dishname)
+        intent.putExtra("dishDescription",dish.dishdescription)
         activity!!.startActivity(intent)
-
     }
 
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
+    fun onButtonPressed(dish : DishModel) {
+        listener?.onFragmentInteraction(dish)
     }
 
     override fun onAttach(context: Context) {
@@ -91,7 +82,7 @@ class DishList : Fragment() {
 
     interface OnFragmentInteractionListener {
 
-        fun onFragmentInteraction(uri: Uri)
+        fun onFragmentInteraction(dish: DishModel)
     }
 
     companion object {
