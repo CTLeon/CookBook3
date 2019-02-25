@@ -14,7 +14,7 @@ class DishActivity : AppCompatActivity(), Dish.OnFragmentInteractionListener, Di
         val dishID: Int? = dishID
         supportFragmentManager.beginTransaction()
             .replace(
-                R.id.dishActivityContainer,
+                R.id.dishFrame,
                 DishEdit.newInstance(dishName!!, dishDescription!!, dishID!!)
             )
             .commit()
@@ -26,6 +26,7 @@ class DishActivity : AppCompatActivity(), Dish.OnFragmentInteractionListener, Di
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dish)
         val dishId: Int =intent.getIntExtra("dishID",0)
@@ -34,7 +35,7 @@ class DishActivity : AppCompatActivity(), Dish.OnFragmentInteractionListener, Di
 
         supportFragmentManager.beginTransaction()
             .replace(
-                R.id.dishActivityContainer,
+                R.id.dishFrame,
                 Dish.newInstance(dishName, dishDescription, dishId)
             )
             .commit()

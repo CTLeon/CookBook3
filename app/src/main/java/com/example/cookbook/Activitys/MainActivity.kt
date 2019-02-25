@@ -1,11 +1,11 @@
 package com.example.cookbook.Activitys
 
-import android.content.Intent
+
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.view.KeyEvent
+
 import com.example.cookbook.*
 import com.example.cookbook.Fragments.Dish
 import com.example.cookbook.Fragments.DishAdd
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), DishList.OnFragmentInteractionListener
         val dishID: Int = dish.id.toInt()
         supportFragmentManager.beginTransaction()
             .replace(
-                R.id.container,
+                R.id.contened,
                 Dish.newInstance(dishName, dishDescription, dishID)
             )
             .commit()
@@ -36,13 +36,13 @@ class MainActivity : AppCompatActivity(), DishList.OnFragmentInteractionListener
         when (item.itemId) {
             R.id.navigation_home -> {
                supportFragmentManager.beginTransaction()
-                   .replace(R.id.container, DishList())
+                   .replace(R.id.contened, DishList())
                    .commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_list -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container,DishAdd())
+                    .replace(R.id.contened,DishAdd())
                     .commit()
 
                 return@OnNavigationItemSelectedListener true
@@ -53,20 +53,11 @@ class MainActivity : AppCompatActivity(), DishList.OnFragmentInteractionListener
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        db = DBHelper(this)
-        val model = DishModel()
-
-
-        model.dishname= "Test"
-        model.dishdescription = "Test"
-        model.id= 1
-        db.addDish(model)
-
-
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, DishList())
+                .replace(R.id.contened, DishList())
                 .commit()
 
 
